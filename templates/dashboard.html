@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Kontrol Paneli - NABI Hosting{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <i class="fas fa-tachometer-alt me-2"></i>Hoş Geldin, {{ username }}!
+                </h2>
+                <p class="card-text">
+                    Sitelerini yönet, yeni site oluştur veya mevcut siteni düzenle.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-plus-circle fa-3x text-primary"></i>
+                </div>
+                <h4>Yeni Site</h4>
+                <p>Yeni bir web sitesi oluştur</p>
+                <a href="/create-site" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i> Oluştur
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fab fa-telegram fa-3x text-info"></i>
+                </div>
+                <h4>Telegram Depo</h4>
+                <p>Dosyalarınız güvende</p>
+                <a href="https://t.me/nabihostingdeposak" target="_blank" class="btn btn-info">
+                    <i class="fab fa-telegram me-2"></i> Kanalı Ziyaret Et
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="mb-3">
+                    <i class="fas fa-question-circle fa-3x text-success"></i>
+                </div>
+                <h4>Yardım</h4>
+                <p>Nasıl kullanılır?</p>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#helpModal">
+                    <i class="fas fa-question me-2"></i> Yardım
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-globe me-2"></i>Sitelerim
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if websites %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Site Adı</th>
+                                    <th>Domain</th>
+                                    <th>Dil Desteği</th>
+                                    <th>Durum</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for site in websites %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ site.site_name }}</strong>
+                                    </td>
+                                    <td>
+                                        <a href="http://{{ site.domain }}" target="_blank" 
+                                           class="text-decoration-none">
+                                            {{ site.domain }}
+                                            <i class="fas fa-external-link-alt ms-1"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {% if site.php_enabled %}
+                                            <span class="badge bg-primary me-1">PHP</span>
+                                        {% endif %}
+                                        {% if site.python_enabled %}
+                                            <span class="badge bg-success">Python</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">Aktif</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="/editor/{{ site.site_name }}" 
+                                               class="btn btn-outline-primary" title="Düzenle">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="http://{{ site.domain }}" target="_blank" 
+                                               class="btn btn-outline-info" title="Ziyaret Et">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <button class="btn btn-outline-danger" 
+                                                    onclick="deleteSite('{{ site.site_name }}')" 
+                                                    title="Sil">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-globe fa-4x text-muted mb-3"></i>
+                        <h4>Henüz hiç siteniz yok</h4>
+                        <p class="text-muted">İlk sitenizi oluşturmak için "Yeni Site" butonuna tıklayın.</p>
+                        <a href="/create-site" class="btn btn-primary btn-lg">
+                            <i class="fas fa-plus me-2"></i> İlk Siteni Oluştur
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Help Modal -->
+<div class="modal fade" id="helpModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-question-circle me-2"></i>Nasıl Kullanılır?
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <h6>1. Site Oluşturma</h6>
+                <p>"Yeni Site" butonu ile site oluşturun. Site adı URL'niz olacak.</p>
+                
+                <h6>2. Kod Yazma</h6>
+                <p>Site editörüne girerek HTML, CSS, JavaScript kodlarınızı yazın.</p>
+                
+                <h6>3. Kaydetme</h6>
+                <p>Kaydettiğinizde dosyalar otomatik Telegram kanalına gönderilir.</p>
+                
+                <h6>4. Yayınlama</h6>
+                <p>Site adresinizi ziyaret edin, dosyalar Telegram'dan otomatik çekilir.</p>
+                
+                <h6>5. backend.py (Zorunlu Değil)</h6>
+                <p>Birden fazla HTML dosyanız varsa, hangisinin ana sayfa olacağını belirtmek için 
+                   <code>public_html/backend.py</code> dosyası oluşturun ve içine 
+                   <code>ENTRY_FILE = "dosya.html"</code> yazın.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function deleteSite(siteName) {
+    if (confirm(`"${siteName}" sitesini silmek istediğinizden emin misiniz?\n\nBu işlem geri alınamaz!`)) {
+        fetch(`/api/delete-site/${siteName}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Site silindi.');
+                location.reload();
+            } else {
+                alert('Silme hatası: ' + data.error);
+            }
+        })
+        .catch(error => {
+            alert('Hata: ' + error.message);
+        });
+    }
+}
+</script>
+{% endblock %}
