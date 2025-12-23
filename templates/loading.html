@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ site_path }} - Yükleniyor</title>
+    <script>
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+           (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+           (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            window.location.reload();
+        }
+    });
+    </script>
+    <style>
+        body {
+            background: black;
+            color: white;
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .container {
+            border: 1px solid #333;
+            padding: 40px;
+            border-radius: 0;
+            max-width: 600px;
+        }
+        .loader {
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 2px solid #333;
+            border-top: 2px solid #0f0;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .url {
+            color: #0f0;
+            font-family: monospace;
+            margin: 20px 0;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="loader"></div>
+        <h1>FREEHOST</h1>
+        <p>Site yükleniyor...</p>
+        <div class="url">{{ base_domain }}/{{ site_path }}</div>
+        <p style="color: #666; font-size: 12px; margin-top: 30px;">
+            Dosyalar senkronize ediliyor. Bu işlem birkaç saniye sürebilir.
+        </p>
+        <p style="color: #444; font-size: 11px; margin-top: 20px;">
+            Sayfa otomatik yenilenecek
+        </p>
+        <script>
+            setTimeout(function() {
+                window.location.reload();
+            }, 3000);
+        </script>
+    </div>
+</body>
+</html>
