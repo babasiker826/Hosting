@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeHost - Ücretsiz TLD Hosting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+           (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+           (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            window.location.reload();
+        }
+    });
+    </script>
+</head>
+<body class="bg-black text-white font-mono">
+    <div class="min-h-screen flex flex-col">
+        <nav class="p-6 border-b border-gray-800">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="text-xl font-bold">FreeHost</span>
+                    <span class="text-xs text-gray-500">v3.0</span>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="/login" class="px-4 py-2 hover:bg-gray-900 rounded">Giriş</a>
+                    <a href="/register" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded">Kayıt</a>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow flex items-center justify-center p-6">
+            <div class="max-w-4xl text-center">
+                <div class="mb-2">
+                    <span class="bg-gray-900 px-3 py-1 rounded text-sm text-green-400">Beta</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tighter">
+                    <span class="text-green-500">$ </span>FreeHost
+                </h1>
+                <div class="mb-10">
+                    <p class="text-2xl text-gray-400 mb-4">
+                        <span class="text-green-400">/</span>site_adin<span class="text-white">.com</span>
+                    </p>
+                    <p class="text-gray-500 text-lg max-w-2xl mx-auto">
+                        Sadece kullanıcı adı ve şifre. Reklam yok, limit yok.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="p-6 border border-gray-800 rounded-lg">
+                        <div class="text-green-500 text-3xl mb-4">⟁</div>
+                        <h3 class="font-bold mb-2">.com .net .org</h3>
+                        <p class="text-gray-500 text-sm">Kendi TLD'nizi seçin.</p>
+                    </div>
+                    <div class="p-6 border border-gray-800 rounded-lg">
+                        <div class="text-green-500 text-3xl mb-4">⏚</div>
+                        <h3 class="font-bold mb-2">Anonim</h3>
+                        <p class="text-gray-500 text-sm">Kimlik gerekmez.</p>
+                    </div>
+                    <div class="p-6 border border-gray-800 rounded-lg">
+                        <div class="text-green-500 text-3xl mb-4">☍</div>
+                        <h3 class="font-bold mb-2">Senkron</h3>
+                        <p class="text-gray-500 text-sm">Otomatik yedekleme.</p>
+                    </div>
+                </div>
+
+                <div class="space-x-4">
+                    <a href="/register" class="inline-block bg-green-600 hover:bg-green-700 px-8 py-3 rounded font-bold">
+                        <i class="fas fa-terminal mr-2"></i>Hemen Başla
+                    </a>
+                    <a href="/login" class="inline-block border border-gray-800 hover:bg-gray-900 px-8 py-3 rounded">
+                        Giriş Yap
+                    </a>
+                </div>
+
+                <div class="mt-16 text-gray-600 text-sm">
+                    <p>https://{{ base_domain }}/<span class="text-green-400">site_adi.com</span></p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="p-6 border-t border-gray-800 text-center text-gray-600 text-sm">
+            <p>FreeHost 2024 | Tüm hakları gizlidir.</p>
+        </footer>
+    </div>
+</body>
+</html>
