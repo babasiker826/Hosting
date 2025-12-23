@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Site Bulunamadı - FreeHost</title>
+    <script>
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+           (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+           (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            window.location.reload();
+        }
+    });
+    </script>
+    <style>
+        body {
+            background: black;
+            color: white;
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .container {
+            border: 1px solid #f00;
+            padding: 40px;
+            border-radius: 0;
+            max-width: 600px;
+        }
+        .error-code {
+            color: #f00;
+            font-size: 48px;
+            margin: 0;
+        }
+        .url {
+            color: #f00;
+            font-family: monospace;
+            margin: 20px 0;
+            padding: 10px;
+            background: #111;
+            border: 1px solid #f00;
+        }
+        .links {
+            margin-top: 30px;
+        }
+        .links a {
+            color: #0f0;
+            margin: 0 10px;
+            text-decoration: none;
+            border: 1px solid #333;
+            padding: 8px 16px;
+        }
+        .links a:hover {
+            background: #222;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="error-code">404</h1>
+        <h2>SITE NOT FOUND</h2>
+        <div class="url">{{ base_domain }}/{{ site_path }}</div>
+        <p>Bu adreste bir site bulunamadı.</p>
+        <p style="color: #666;">Site sahibi henüz site oluşturmamış olabilir.</p>
+        
+        <div class="links">
+            <a href="/">Ana Sayfa</a>
+            <a href="/dashboard">Kontrol Paneli</a>
+            <a href="/create-site">Site Oluştur</a>
+        </div>
+        
+        <p style="color: #444; font-size: 11px; margin-top: 30px;">
+            FreeHost v3.0 | Tüm hakları gizlidir.
+        </p>
+    </div>
+</body>
+</html>
