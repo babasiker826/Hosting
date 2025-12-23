@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Giriş — Nabi Hosting{% endblock %}
+
+{% block content %}
+<div class="auth-grid">
+  <div class="card auth-left">
+    <h1>Hoş geldin 👋</h1>
+    <p>Paneline giriş yap, siteni aç ve canlıya geçir.</p>
+    <ul class="features">
+      <li>Subdomain tabanlı hosting</li>
+      <li>Canlı dosya düzenleme</li>
+      <li>PHP & Python çalıştırma (opsiyonel)</li>
+    </ul>
+    <div class="muted">Kayıtlı bir hesabın yoksa panelde kullanıcı oluştur.</div>
+  </div>
+
+  <div class="card auth-right">
+    <h2>Giriş Yap</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/login" class="form">
+      <label>Kullanıcı adı</label>
+      <input name="username" type="text" placeholder="nabi" required>
+
+      <label>Şifre</label>
+      <input name="password" type="password" placeholder="••••••" required>
+
+      <button class="btn">Giriş Yap</button>
+    </form>
+
+    <form method="POST" action="/register" class="form small mt">
+      <h3>Hemen kayıt ol</h3>
+      <input name="username" placeholder="yeni_kullanici" required>
+      <input name="email" placeholder="mail@domain" required>
+      <input name="password" type="password" placeholder="şifre" required>
+      <input name="confirm_password" type="password" placeholder="şifre tekrar" required>
+      <button class="btn alt">Hesap Oluştur</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
