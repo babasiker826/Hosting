@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Dosya Yöneticisi — Nabi Hosting{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>Dosya Yöneticisi</h2>
+
+  <div class="row">
+    <div style="flex:1;">
+      <label>Site Seç</label>
+      <select id="siteSelect">
+        <option value="">-- Site seç --</option>
+        {% for site in websites %}
+          <option value="{{ site.id }}">{{ site.site_name }} — {{ site.domain }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div style="flex:1; text-align:right;">
+      <label>&nbsp;</label>
+      <div>
+        <button id="btnNewFile" class="btn alt">Yeni Dosya</button>
+        <button id="btnUpload" class="btn">Yükle</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="files-area mt">
+    <div id="filesList" class="files-list">
+      <p class="muted">Site seçmeden önce dosya listesi görünmez.</p>
+    </div>
+
+    <div id="editorWrap" class="editor-wrap" style="display:none;">
+      <div class="editor-toolbar">
+        <span id="currentFile"></span>
+        <div>
+          <button id="saveBtn" class="btn">Kaydet</button>
+          <button id="deleteBtn" class="btn danger">Sil</button>
+          <a id="openLive" class="btn alt" target="_blank">Canlı Aç</a>
+        </div>
+      </div>
+      <textarea id="fileEditor" class="file-editor" spellcheck="false"></textarea>
+    </div>
+  </div>
+</div>
+{% endblock %}  <!-- <-- Burayı ekledik: content bloğunu kapat -->
+
+{% block scripts %}
+<script>
+const apiFiles = (siteId) => `/api/files/${siteId}`;
+const apiFile = (siteId, filename) => `/api/file/${siteId}/${encodeURIComponent(filename)}`;
+const saveFileUrl = (siteId, filename) => `/save-file/${siteId}/${encodeURIComponent(filename)}`;
+const createFileUrl = (siteId) => `/create-file/${siteId}`;
+const deleteFileUrl = (siteId, filename) => `/delete-file/${siteId}/${encodeURIComponent(filename)}`;
+
+const el = (id) => document.getElementById(id);
+
+let selectedSite = null;
+let currentFilename = null;
+
+el('siteSelect').addEventListener('change', async (e) => {
+  selectedSite = e.target.value;
+  el('editorWrap').style.display = 'none';
+  el('filesList').innerHTML = '<p class="muted">Yükleniyor...</p>';
+  if(!selectedSite) { el('filesList').innerHTML = '<p class="muted">Site seçin.</p>'; return; }
+  const res = await fetch(apiFiles(selectedSite));
+  const data = await res.json();
+  if(!data.files) { el('filesList').innerHTML = '<p class="muted">Dosya okunamadı.</p>'; return; }
+  if(data.files.length===0) el('filesList').innerHTML = '<p class="muted">Klasör boş.</p>';
+  el('filesList').innerHTML = '<ul>' + data.files.map(f => `<li><a href="#" class="file-link">${f}</a></li>`).join('') + '</ul>';
+  document.querySelectorAll('.file-link').forEach(a => {
+    a.addEventListener('click', async (ev) => {
+      ev.preventDefault();
+      const filename = ev.target.textContent;
+      currentFilename = filename;
+      const r = await fetch(apiFile(selectedSite, filename));
+      const j = await r.json();
+      if(j.content!==undefined){
+        el('fileEditor').value = j.content;
+        el('editorWrap').style.display = '';
+        el('currentFile').textContent = filename;
+        el('openLive').href = `http://${document.querySelector('#siteSelect option:checked').textContent.split(' — ')[0]}.{{ base_domain }}:{{ port }}`;
+      } else {
+        alert('Dosya açılamadı');
+      }
+    });
+  });
+});
+
+el('btnNewFile').addEventListener('click', async () => {
+  if(!selectedSite){ alert('Önce site seçin'); return; }
+  const name = prompt('Yeni dosya adı (ör: index.html)');
+  if(!name) return;
+  const res = await fetch(createFileUrl(selectedSite), {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({filename:name})
+  });
+  const j = await res.json();
+  if(j.success) {
+    alert('Dosya oluşturuldu');
+    el('siteSelect').dispatchEvent(new Event('change'));
+  } else alert('Hata: ' + (j.error||''));
+});
+
+el('saveBtn').addEventListener('click', async () => {
+  if(!selectedSite || !currentFilename) return alert('Dosya seçili değil');
+  const content = el('fileEditor').value;
+  const res = await fetch(saveFileUrl(selectedSite, currentFilename), {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({content})
+  });
+  const j = await res.json();
+  if(j.success) alert('Kaydedildi');
+  else alert('Hata: ' + (j.error||''));
+});
+
+el('deleteBtn').addEventListener('click', async () => {
+  if(!selectedSite || !currentFilename) return alert('Dosya seçili değil');
+  if(!confirm('Dosyayı silmek istediğine emin misin?')) return;
+  const res = await fetch(deleteFileUrl(selectedSite, currentFilename), {method:'DELETE'});
+  const j = await res.json();
+  if(j.success){ alert('Silindi'); el('siteSelect').dispatchEvent(new Event('change')); el('editorWrap').style.display='none';}
+  else alert('Hata: '+(j.error||''));
+});
+</script>
+{% endblock %}
