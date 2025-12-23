@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Oluştur - FreeHost</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+           (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+           (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            window.location.reload();
+        }
+    });
+    </script>
+</head>
+<body class="bg-black text-white font-mono">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-10">
+                <a href="/dashboard" class="inline-block mb-6 text-gray-500 hover:text-white">
+                    ← Geri
+                </a>
+                <h1 class="text-3xl font-bold mb-2">Site Oluştur</h1>
+                <p class="text-gray-500">Yeni TLD'li site</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="mb-6">
+                {% for category, message in messages %}
+                <div class="p-3 rounded border {% if category == 'success' %}border-green-800 bg-green-900/20{% else %}border-red-800 bg-red-900/20{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="/create-site" class="space-y-6">
+                <div>
+                    <label class="block text-sm text-gray-500 mb-2">Site Adı</label>
+                    <input type="text" name="site_name" required class="w-full bg-gray-900 border border-gray-800 rounded p-3 focus:outline-none focus:border-green-500" placeholder="site_adi">
+                    <p class="text-xs text-gray-600 mt-1">Sadece harf, rakam ve tire</p>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-500 mb-2">TLD Seç</label>
+                    <select name="tld" class="w-full bg-gray-900 border border-gray-800 rounded p-3 focus:outline-none focus:border-green-500">
+                        <option value=".com">.com</option>
+                        <option value=".net">.net</option>
+                        <option value=".org">.org</option>
+                        <option value=".xyz">.xyz</option>
+                        <option value=".info">.info</option>
+                        <option value=".site">.site</option>
+                    </select>
+                </div>
+                <div class="p-4 border border-gray-800 rounded">
+                    <p class="text-sm text-gray-500">Site adresin:</p>
+                    <p class="font-bold">
+                        https://{{ base_domain }}/<span id="preview">site_adi</span><span id="tld-preview">.com</span>
+                    </p>
+                </div>
+                <button type="submit" class="w-full bg-green-600 hover:bg-green-700 p-3 rounded font-bold">
+                    Siteyi Oluştur
+                </button>
+            </form>
+
+            <div class="mt-8 text-sm text-gray-600">
+                <p>Site oluşturulduktan sonra:</p>
+                <p>1. Editör ile dosyalarını düzenle</p>
+                <p>2. Otomatik senkronizasyon başlayacak</p>
+                <p>3. Site hazır</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.querySelector('input[name="site_name"]').addEventListener('input', function(e) {
+        document.getElementById('preview').textContent = e.target.value.toLowerCase().replace(/[^a-z0-9\-]/g, '');
+    });
+    document.querySelector('select[name="tld"]').addEventListener('change', function(e) {
+        document.getElementById('tld-preview').textContent = e.target.value;
+    });
+    </script>
+</body>
+</html>
