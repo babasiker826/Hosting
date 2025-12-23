@@ -1,5 +1,4 @@
 Flask==2.3.3
 Werkzeug==2.3.7
 requests==2.31.0
-telethon==1.28.5
-gunicorn==21.2.0
+Pillow==10.2.0
