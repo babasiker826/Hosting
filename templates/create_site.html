@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Yeni Site Oluştur - NABI Hosting{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-plus-circle me-2"></i>Yeni Site Oluştur
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/create-site">
+                    <div class="mb-3">
+                        <label for="site_name" class="form-label">
+                            <i class="fas fa-globe me-1"></i> Site Adı
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="site_name" name="site_name" 
+                                   required placeholder="sitemin-adi" pattern="[a-z0-9\-_]+"
+                                   oninput="updatePreview()">
+                            <span class="input-group-text">.{{ base_domain }}</span>
+                        </div>
+                        <div class="form-text">
+                            Küçük harf, rakam, tire (-) ve alt çizgi (_) kullanabilirsiniz.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <i class="fas fa-link me-1"></i> Site Adresiniz:
+                        </label>
+                        <div class="alert alert-info">
+                            <i class="fas fa-external-link-alt me-2"></i>
+                            <strong id="domainPreview">example.{{ base_domain }}</strong>
+                            <div class="mt-2">
+                                <small>Bu adresten sitenize erişilebilecek.</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">
+                            <i class="fas fa-code me-1"></i> Dil Desteği
+                        </label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" 
+                                           id="php_enabled" name="php_enabled" checked>
+                                    <label class="form-check-label" for="php_enabled">
+                                        <i class="fab fa-php me-1 text-primary"></i> PHP Desteği
+                                    </label>
+                                    <div class="form-text">
+                                        .php uzantılı dosyaları çalıştırabilirsiniz.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" 
+                                           id="python_enabled" name="python_enabled">
+                                    <label class="form-check-label" for="python_enabled">
+                                        <i class="fab fa-python me-1 text-success"></i> Python Desteği
+                                    </label>
+                                    <div class="form-text">
+                                        .py uzantılı dosyaları çalıştırabilirsiniz.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Önemli:</strong> 
+                            Birden fazla HTML dosyası oluşturursanız, 
+                            ana sayfayı belirtmek için <code>backend.py</code> dosyası oluşturmalısınız.
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-rocket me-2"></i> Siteyi Oluştur
+                        </button>
+                        <a href="/dashboard" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i> Geri Dön
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>İpuçları
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Site oluşturulduktan sonra otomatik olarak 
+                        <code>index.html</code> dosyası oluşturulacak.
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Kodlarınızı düzenlemek için "Site Editörü"nü kullanın.
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Dosyalarınız kaydedildiğinde Telegram kanalına gönderilecek.
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success me-2"></i>
+                        Site adresinizi ziyaret ederek sitenizi görebilirsiniz.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updatePreview() {
+    const siteName = document.getElementById('site_name').value || 'example';
+    document.getElementById('domainPreview').textContent = 
+        siteName.toLowerCase() + '.{{ base_domain }}';
+}
+
+// Sayfa yüklendiğinde preview'ı güncelle
+document.addEventListener('DOMContentLoaded', updatePreview);
+</script>
+{% endblock %}
