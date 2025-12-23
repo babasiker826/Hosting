@@ -1,46 +1,141 @@
 {% extends "base.html" %}
-{% block title %}Giriş — Nabi Hosting{% endblock %}
+
+{% block title %}Giriş Yap - Nabi Hosting{% endblock %}
 
 {% block content %}
-<div class="auth-grid">
-  <div class="card auth-left">
-    <h1>Hoş geldin 👋</h1>
-    <p>Paneline giriş yap, siteni aç ve canlıya geçir.</p>
-    <ul class="features">
-      <li>Subdomain tabanlı hosting</li>
-      <li>Canlı dosya düzenleme</li>
-      <li>PHP & Python çalıştırma (opsiyonel)</li>
-    </ul>
-    <div class="muted">Kayıtlı bir hesabın yoksa panelde kullanıcı oluştur.</div>
-  </div>
-
-  <div class="card auth-right">
-    <h2>Giriş Yap</h2>
-
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div class="alert">{{ messages[0] }}</div>
-      {% endif %}
-    {% endwith %}
-
-    <form method="POST" action="/login" class="form">
-      <label>Kullanıcı adı</label>
-      <input name="username" type="text" placeholder="nabi" required>
-
-      <label>Şifre</label>
-      <input name="password" type="password" placeholder="••••••" required>
-
-      <button class="btn">Giriş Yap</button>
-    </form>
-
-    <form method="POST" action="/register" class="form small mt">
-      <h3>Hemen kayıt ol</h3>
-      <input name="username" placeholder="yeni_kullanici" required>
-      <input name="email" placeholder="mail@domain" required>
-      <input name="password" type="password" placeholder="şifre" required>
-      <input name="confirm_password" type="password" placeholder="şifre tekrar" required>
-      <button class="btn alt">Hesap Oluştur</button>
-    </form>
-  </div>
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="fas fa-sign-in-alt auth-icon"></i>
+            <h2>Giriş Yap</h2>
+            <p>Hesabınıza erişmek için giriş yapın</p>
+        </div>
+        
+        <form method="POST" action="/login" class="auth-form">
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> Kullanıcı Adı</label>
+                <input type="text" id="username" name="username" class="form-control" required placeholder="kullaniciadi">
+            </div>
+            
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Şifre</label>
+                <input type="password" id="password" name="password" class="form-control" required placeholder="••••••••">
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-sign-in-alt"></i> Giriş Yap
+            </button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Hesabınız yok mu? <a href="/register">Kayıt Ol</a></p>
+            <p><a href="/"><i class="fas fa-home"></i> Ana Sayfa</a></p>
+        </div>
+    </div>
 </div>
+
+<style>
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 2rem;
+}
+
+.auth-card {
+    background: rgba(30, 41, 59, 0.8);
+    border-radius: 16px;
+    border: 1px solid #334155;
+    padding: 3rem;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.auth-icon {
+    font-size: 3.5rem;
+    color: #60a5fa;
+    margin-bottom: 1rem;
+}
+
+.auth-header h2 {
+    font-size: 2rem;
+    color: #e2e8f0;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+    color: #94a3b8;
+}
+
+.auth-form {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: #e2e8f0;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-group label i {
+    margin-right: 0.5rem;
+    color: #60a5fa;
+}
+
+.form-control {
+    width: 100%;
+    padding: 1rem;
+    background: #1e293b;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    color: #f1f5f9;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+}
+
+.btn-block {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+.auth-footer {
+    text-align: center;
+    border-top: 1px solid #334155;
+    padding-top: 1.5rem;
+    color: #94a3b8;
+}
+
+.auth-footer a {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.auth-footer p {
+    margin-bottom: 0.5rem;
+}
+</style>
 {% endblock %}
