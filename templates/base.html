@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}Nabi Hosting{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    {% if session.username %}
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-wrapper">
+          <div class="logo-icon">
+            <i class="fas fa-server"></i>
+          </div>
+          <div class="brand-info">
+            <h1>Nabi Hosting</h1>
+            <p class="tagline">Premium Web Hosting</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="sidebar-user">
+        <div class="user-avatar">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="user-info">
+          <strong>{{ session.username }}</strong>
+          <small>Müşteri Paneli</small>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="/dashboard" class="nav-item {% if request.path == '/dashboard' %}active{% endif %}">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="/websites" class="nav-item {% if request.path == '/websites' %}active{% endif %}">
+              <i class="fas fa-globe"></i>
+              <span>Sitelerim</span>
+              <span class="badge">3</span>
+            </a>
+          </li>
+          <li>
+            <a href="/file-manager" class="nav-item {% if request.path == '/file-manager' %}active{% endif %}">
+              <i class="fas fa-folder"></i>
+              <span>Dosya Yöneticisi</span>
+            </a>
+          </li>
+          <li>
+            <a href="/databases" class="nav-item {% if request.path == '/databases' %}active{% endif %}">
+              <i class="fas fa-database"></i>
+              <span>Veritabanları</span>
+            </a>
+          </li>
+          <li>
+            <a href="/domains" class="nav-item {% if request.path == '/domains' %}active{% endif %}">
+              <i class="fas fa-link"></i>
+              <span>Alan Adları</span>
+            </a>
+          </li>
+          <li>
+            <a href="/email" class="nav-item {% if request.path == '/email' %}active{% endif %}">
+              <i class="fas fa-envelope"></i>
+              <span>E-Posta Hesapları</span>
+            </a>
+          </li>
+          <li>
+            <a href="/backups" class="nav-item {% if request.path == '/backups' %}active{% endif %}">
+              <i class="fas fa-save"></i>
+              <span>Yedeklemeler</span>
+            </a>
+          </li>
+          <li>
+            <a href="/settings" class="nav-item {% if request.path == '/settings' %}active{% endif %}">
+              <i class="fas fa-cog"></i>
+              <span>Ayarlar</span>
+            </a>
+          </li>
+          <li class="nav-divider"></li>
+          <li>
+            <a href="/support" class="nav-item">
+              <i class="fas fa-headset"></i>
+              <span>Destek</span>
+            </a>
+          </li>
+          <li>
+            <a href="/billing" class="nav-item">
+              <i class="fas fa-credit-card"></i>
+              <span>Faturalandırma</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="server-status">
+          <div class="status-indicator online"></div>
+          <span>Sunucu Durumu: <strong>Aktif</strong></span>
+        </div>
+        <a href="/logout" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Çıkış Yap</span>
+        </a>
+      </div>
+    </aside>
+    {% endif %}
+    
+    <!-- Main Content Area -->
+    <div class="main-content {% if not session.username %}full-width{% endif %}">
+      <!-- Top Bar (only shown when logged in) -->
+      {% if session.username %}
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="breadcrumbs">
+            <a href="/dashboard">Ana Sayfa</a>
+            {% block breadcrumbs %}{% endblock %}
+          </div>
+        </div>
+        
+        <div class="topbar-right">
+          <div class="topbar-actions">
+            <button class="topbar-btn notification-btn">
+              <i class="fas fa-bell"></i>
+              <span class="notification-count">3</span>
+            </button>
+            
+            <div class="topbar-dropdown">
+              <button class="topbar-btn account-btn">
+                <i class="fas fa-user-circle"></i>
+                <span>{{ session.username }}</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="dropdown-menu">
+                <a href="/profile"><i class="fas fa-user"></i> Profilim</a>
+                <a href="/billing"><i class="fas fa-credit-card"></i> Faturalar</a>
+                <a href="/support"><i class="fas fa-headset"></i> Destek</a>
+                <div class="dropdown-divider"></div>
+                <a href="/logout"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      {% else %}
+      <!-- Login page header -->
+      <header class="login-header">
+        <div class="container">
+          <a class="brand" href="/">
+            <div class="logo">
+              <i class="fas fa-server"></i>
+            </div>
+            <div class="brand-text">
+              <strong>Nabi</strong> Hosting
+              <small class="tagline">Premium Web Hosting Çözümleri</small>
+            </div>
+          </a>
+          <nav class="nav">
+            <a href="/">Ana Sayfa</a>
+            <a href="/#features">Özellikler</a>
+            <a href="/#pricing">Fiyatlar</a>
+            <a href="/#support">Destek</a>
+            <a href="/" class="btn-login">Giriş Yap</a>
+          </nav>
+        </div>
+      </header>
+      {% endif %}
+      
+      <!-- Main Content -->
+      <main class="content-area">
+        {% if session.username %}
+        <div class="page-header">
+          <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+          <div class="page-actions">
+            {% block page_actions %}{% endblock %}
+          </div>
+        </div>
+        {% endif %}
+        
+        <!-- Status Alerts -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="alerts-container">
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'error' %}exclamation-circle{% elif category == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+                  <span>{{ message }}</span>
+                  <button class="alert-close">&times;</button>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        
+        <!-- Page Content -->
+        {% block content %}{% endblock %}
+      </main>
+      
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="container footer-inner">
+          <div class="footer-left">
+            <div class="footer-logo">
+              <i class="fas fa-server"></i>
+              <span>Nabi Hosting</span>
+            </div>
+            <p class="copyright">© 2023 Nabi Hosting. Tüm hakları saklıdır.</p>
+          </div>
+          
+          <div class="footer-right">
+            <div class="footer-links">
+              <a href="/terms">Kullanım Şartları</a>
+              <a href="/privacy">Gizlilik Politikası</a>
+              <a href="/contact">İletişim</a>
+              <a href="/about">Hakkımızda</a>
+            </div>
+            <div class="server-info">
+              <small>Sunucu: <code>{{ base_domain if base_domain is defined else 'lvh.me' }}</code></small>
+              <small>Versiyon: <code>v2.1.4</code></small>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuToggle = document.getElementById('menuToggle');
+      if (menuToggle) {
+        menuToggle.addEventListener('click', function() {
+          document.body.classList.toggle('sidebar-collapsed');
+        });
+      }
+      
+      // Close alerts
+      const alertCloseButtons = document.querySelectorAll('.alert-close');
+      alertCloseButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          this.closest('.alert').style.display = 'none';
+        });
+      });
+      
+      // Dropdown functionality
+      const accountBtn = document.querySelector('.account-btn');
+      if (accountBtn) {
+        accountBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          this.closest('.topbar-dropdown').classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+          document.querySelectorAll('.topbar-dropdown').forEach(dropdown => {
+            dropdown.classList.remove('active');
+          });
+        });
+      }
+    });
+  </script>
+  
+  {% block scripts %}{% endblock %}
+</body>
+</html>
