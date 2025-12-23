@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Yeni Site Oluştur — Nabi Hosting{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>Yeni Site Oluştur</h2>
+  <form method="POST" action="/create-site" class="form">
+    <label>Site adı (subdomain kısmı)</label>
+    <input name="site_name" placeholder="firma-adi" required>
+    <div class="inline">
+      <label><input type="checkbox" name="php_enabled" checked> PHP</label>
+      <label><input type="checkbox" name="python_enabled"> Python</label>
+    </div>
+    <div class="muted">Site URL: <code>http://[siteadi].{{ base_domain }}:{{ port }}</code></div>
+    <button class="btn">Oluştur</button>
+  </form>
+</div>
+{% endblock %}
