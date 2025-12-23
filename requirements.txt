@@ -5,4 +5,4 @@ Flask-SQLAlchemy==3.0.3
 Werkzeug==2.3.7
 python-dotenv==1.0.0
 requests==2.31.0
-psycopg-binary==3.1.10
+psycopg-binary==3.3.2
