@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editör - {{ site_name }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+           (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+           (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            window.location.reload();
+        }
+    });
+    </script>
+</head>
+<body class="bg-black text-white font-mono">
+    <div class="flex flex-col h-screen">
+        <div class="p-4 border-b border-gray-800 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="/dashboard" class="text-gray-500 hover:text-white">
+                    ←
+                </a>
+                <div>
+                    <h1 class="font-bold">{{ site_name }}</h1>
+                    <p class="text-sm text-gray-500">{{ domain }}</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="saveFile()" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded">
+                    Kaydet
+                </button>
+                <a href="https://{{ domain }}" target="_blank" class="px-4 py-2 border border-gray-800 hover:bg-gray-900 rounded">
+                    Görüntüle
+                </a>
+            </div>
+        </div>
+
+        <div class="flex flex-grow overflow-hidden">
+            <div class="w-64 border-r border-gray-800 overflow-y-auto">
+                <div class="p-4 border-b border-gray-800">
+                    <h2 class="font-bold">Dosyalar</h2>
+                </div>
+                <div id="file-list" class="p-2">
+                    <div class="text-gray-600 p-2">Yükleniyor...</div>
+                </div>
+                <div class="p-4 border-t border-gray-800">
+                    <button onclick="newFile()" class="w-full p-2 border border-gray-800 hover:bg-gray-900 rounded">
+                        + Yeni Dosya
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-grow flex flex-col">
+                <div class="p-4 border-b border-gray-800">
+                    <div class="flex items-center space-x-4">
+                        <select id="file-select" class="bg-gray-900 border border-gray-800 rounded p-2">
+                            <option value="">Dosya seç</option>
+                        </select>
+                        <div id="save-status" class="text-sm text-gray-500"></div>
+                    </div>
+                </div>
+                <div class="flex-grow relative">
+                    <textarea id="editor" class="w-full h-full bg-gray-900 text-white p-4 resize-none outline-none"></textarea>
+                </div>
+                <div class="p-4 border-t border-gray-800 text-sm text-gray-500">
+                    <div class="flex justify-between">
+                        <div>FreeHost Editör</div>
+                        <div id="char-count">0 karakter</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const siteName = "{{ site_name }}";
+    let currentFile = "";
+
+    async function loadFiles() {
+        const res = await fetch(`/api/get-files/${siteName}`);
+        const data = await res.json();
+        
+        const fileList = document.getElementById('file-list');
+        const fileSelect = document.getElementById('file-select');
+        
+        fileList.innerHTML = "";
+        fileSelect.innerHTML = '<option value="">Dosya seç</option>';
+        
+        if (data.files.length === 0) {
+            fileList.innerHTML = '<div class="text-gray-600 p-2">Dosya yok</div>';
+            return;
+        }
+        
+        data.files.forEach(file => {
+            const fileItem = document.createElement('div');
+            fileItem.className = "p-2 hover:bg-gray-900 cursor-pointer rounded";
+            fileItem.textContent = file.name;
+            fileItem.onclick = () => loadFileContent(file.name);
+            fileList.appendChild(fileItem);
+            
+            const option = document.createElement('option');
+            option.value = file.name;
+            option.textContent = file.name;
+            fileSelect.appendChild(option);
+        });
+        
+        if (data.files.length > 0) {
+            loadFileContent(data.files[0].name);
+        }
+    }
+    
+    document.getElementById('file-select').addEventListener('change', function(e) {
+        if (e.target.value) {
+            loadFileContent(e.target.value);
+        }
+    });
+    
+    async function loadFileContent(filename) {
+        currentFile = filename;
+        document.getElementById('file-select').value = filename;
+        
+        const res = await fetch(`/api/get-file/${siteName}/${filename}`);
+        const data = await res.json();
+        
+        if (data.content) {
+            document.getElementById('editor').value = data.content;
+            updateCharCount();
+        }
+    }
+    
+    async function saveFile() {
+        if (!currentFile) {
+            alert("Önce bir dosya seçin");
+            return;
+        }
+        
+        const content = document.getElementById('editor').value;
+        const res = await fetch(`/api/save-file/${siteName}/${currentFile}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({content: content})
+        });
+        
+        const data = await res.json();
+        document.getElementById('save-status').textContent = data.message;
+        setTimeout(() => {
+            document.getElementById('save-status').textContent = "";
+        }, 3000);
+    }
+    
+    function newFile() {
+        const filename = prompt("Yeni dosya adı (örn: index.html):");
+        if (filename) {
+            currentFile = filename;
+            document.getElementById('editor').value = "";
+            saveFile();
+            setTimeout(loadFiles, 500);
+        }
+    }
+    
+    function updateCharCount() {
+        const text = document.getElementById('editor').value;
+        document.getElementById('char-count').textContent = text.length + " karakter";
+    }
+    
+    document.getElementById('editor').addEventListener('input', updateCharCount);
+    
+    window.onload = loadFiles;
+    </script>
+</body>
+</html>
