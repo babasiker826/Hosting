@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Giriş Yap - NABI Hosting{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/login">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user me-1"></i> Kullanıcı Adı
+                        </label>
+                        <input type="text" class="form-control" id="username" name="username" 
+                               required placeholder="Kullanıcı adınız" autofocus>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock me-1"></i> Şifre
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               required placeholder="Şifreniz">
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-sign-in-alt me-2"></i> Giriş Yap
+                        </button>
+                        <a href="/register" class="btn btn-outline-secondary">
+                            <i class="fas fa-user-plus me-2"></i> Yeni Hesap Oluştur
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="text-center mt-4 text-white">
+            <p>
+                <i class="fab fa-telegram fa-lg me-2"></i>
+                Telegram ile entegre güvenli hosting
+            </p>
+            <div class="alert alert-info mt-3">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Demo Hesap:</strong> demo / demo123
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
