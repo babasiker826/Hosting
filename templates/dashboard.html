@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Nabi Hosting{% endblock %}
+
+{% block content %}
+<section class="hero card">
+  <div class="hero-left">
+    <h1>Merhaba, {{ session.username }}</h1>
+    <p>Bugün ne yapalım? Yeni site açabilir, dosyalarını düzenleyebilir veya siteni yönetebilirsin.</p>
+    <div class="help-row">
+      <div class="stat">
+        <div class="num">{{ sites_count }}</div>
+        <div class="label">Toplam Site</div>
+      </div>
+      <div class="stat">
+        <div class="num">{{ websites|length }}</div>
+        <div class="label">Active</div>
+      </div>
+      <div class="actions">
+        <a href="/create-site" class="btn">Yeni Site Oluştur</a>
+        <a href="/file-manager" class="btn alt">Dosya Yöneticisi</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='360' height='200'><rect width='100%' height='100%' fill='%230b1220'/><text x='50%' y='50%' font-size='20' fill='%23639' text-anchor='middle'>Nabi Hosting</text></svg>" alt="illustration" class="hero-ill">
+  </div>
+</section>
+
+<section class="card">
+  <h3>Sitelerin</h3>
+  {% if websites %}
+    <div class="site-grid">
+      {% for site in websites %}
+      <div class="site-card">
+        <div class="site-head">
+          <div class="site-name">{{ site.site_name }}</div>
+          <div class="site-actions">
+            <a class="link" target="_blank" href="http://{{ site.site_name }}.{{ base_domain }}:{{ port }}">Open</a>
+            <a class="link" href="/file-manager?site_id={{ site.id }}">Files</a>
+            <a class="link" href="/toggle-site/{{ site.id }}">{{ 'Deactivate' if site.status=='active' else 'Activate' }}</a>
+            <a class="link danger" href="/delete-site/{{ site.id }}">Delete</a>
+          </div>
+        </div>
+        <div class="site-meta">
+          <span>{{ site.domain }}</span>
+          <small>Oluşturulma: {{ site.created_at.strftime("%d.%m.%Y") if site.created_at else "-" }}</small>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Henüz siteniz yok. <a href="/create-site">Yeni site oluştur</a>.</p>
+  {% endif %}
+</section>
+{% endblock %}
