@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - FreeHost Pro</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': {
+                            '50': '#eff6ff',
+                            '100': '#dbeafe',
+                            '200': '#bfdbfe',
+                            '300': '#93c5fd',
+                            '400': '#60a5fa',
+                            '500': '#3b82f6',
+                            '600': '#2563eb',
+                            '700': '#1d4ed8',
+                            '800': '#1e40af',
+                            '900': '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-size: 200% 200%;
+            animation: gradient 8s ease infinite;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-950 text-white">
+    
+    <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute -top-60 -right-60 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div class="absolute -bottom-60 -left-60 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10"></div>
+    </div>
+    
+    <div class="relative min-h-screen py-12 px-4">
+        <div class="max-w-6xl mx-auto">
+          
+            <div class="text-center mb-16">
+                <a href="/" class="inline-block mb-8">
+                    <div class="inline-flex items-center space-x-3 bg-gray-900/50 px-6 py-3 rounded-2xl">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <span class="text-xl font-bold">FreeHost Pro</span>
+                    </div>
+                </a>
+                
+                <h1 class="text-5xl font-bold mb-4">Premium Web Hosting'e <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-purple-400">Hoş Geldiniz</span></h1>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">Profesyonel web sitenizi 60 saniyede oluşturun. Ücretsiz başlayın, ihtiyacınız oldukça büyüyün.</p>
+            </div>
+            
+            
+            <div class="grid md:grid-cols-3 gap-6 mb-12">
+                <div class="feature-card rounded-2xl p-6">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-bolt text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Anında Kurulum</h3>
+                    <p class="text-gray-400">Siteniz 60 saniyede hazır. Teknik bilgi gerektirmez.</p>
+                </div>
+                
+                <div class="feature-card rounded-2xl p-6">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Premium Güvenlik</h3>
+                    <p class="text-gray-400">DDoS koruması, SSL sertifikası ve günlük yedekleme.</p>
+                </div>
+                
+                <div class="feature-card rounded-2xl p-6">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Yüksek Performans</h3>
+                    <p class="text-gray-400">SSD depolama, CDN entegrasyonu ve %99.9 uptime.</p>
+                </div>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- ben yoruldum kodlar bitmiyo elerim sikildi awk-->
+                <div class="glass-card rounded-2xl p-8 shadow-2xl">
+                    <h2 class="text-3xl font-bold mb-2">Hesap Oluştur</h2>
+                    <p class="text-gray-400 mb-8">Profesyonel yolculuğunuza başlayın</p>
+                    
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    <div class="mb-6 space-y-3">
+                        {% for category, message in messages %}
+                        <div class="p-4 rounded-xl {% if category == 'success' %}border-green-500/30 bg-green-500/10{% else %}border-red-500/30 bg-red-500/10{% endif %}">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas {% if category == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+                                <span>{{ message }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                    
+                    <form method="POST" action="/register" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Kullanıcı Adı</label>
+                                <div class="relative">
+                                    <input type="text" name="username" required 
+                                           class="w-full bg-gray-900/50 border border-gray-700 rounded-xl px-4 py-4 pl-12 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                           placeholder="johndoe">
+                                    <i class="fas fa-user absolute left-4 top-4 text-gray-500"></i>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">E-posta</label>
+                                <div class="relative">
+                                    <input type="email" name="email" 
+                                           class="w-full bg-gray-900/50 border border-gray-700 rounded-xl px-4 py-4 pl-12 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                           placeholder="ornek@email.com">
+                                    <i class="fas fa-envelope absolute left-4 top-4 text-gray-500"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Şifre</label>
+                                <div class="relative">
+                                    <input type="password" name="password" required 
+                                           class="w-full bg-gray-900/50 border border-gray-700 rounded-xl px-4 py-4 pl-12 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                           placeholder="••••••••">
+                                    <i class="fas fa-lock absolute left-4 top-4 text-gray-500"></i>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Şifre Tekrar</label>
+                                <div class="relative">
+                                    <input type="password" name="confirm_password" required 
+                                           class="w-full bg-gray-900/50 border border-gray-700 rounded-xl px-4 py-4 pl-12 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                           placeholder="••••••••">
+                                    <i class="fas fa-lock absolute left-4 top-4 text-gray-500"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <input type="checkbox" id="terms" name="terms" required 
+                                   class="w-4 h-4 mt-1 rounded border-gray-700 bg-gray-900">
+                            <label for="terms" class="ml-2 text-sm text-gray-400">
+                                <a href="#" class="text-primary-400 hover:underline">Kullanım şartlarını</a> ve 
+                                <a href="#" class="text-primary-400 hover:underline">gizlilik politikasını</a> kabul ediyorum
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="w-full btn-gradient py-4 rounded-xl font-bold text-lg">
+                            Hesabı Oluştur
+                            <i class="fas fa-rocket ml-2"></i>
+                        </button>
+                        
+                        <div class="text-center pt-4 border-t border-gray-800">
+                            <p class="text-gray-400">Zaten hesabınız var? 
+                                <a href="/login" class="text-primary-400 hover:text-primary-300 font-semibold">Giriş yapın</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+                
+                
+                <div class="space-y-8">
+                    <div class="bg-gradient-to-br from-gray-900 to-black rounded-2xl p-8 border border-gray-800">
+                        <h3 class="text-2xl font-bold mb-6">FreeHost Pro ile Neler Kazanırsınız?</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check text-green-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Ücretsiz SSL Sertifikası</h4>
+                                    <p class="text-gray-400 text-sm">Tüm siteleriniz için otomatik SSL sertifikası</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check text-blue-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Sınırsız Bant Genişliği</h4>
+                                    <p class="text-gray-400 text-sm">Trafik sınırlaması olmadan büyüyün</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check text-purple-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">24/7 Destek</h4>
+                                    <p class="text-gray-400 text-sm">Profesyonel teknik destek ekibimiz yanınızda</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="w-8 h-8 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-check text-yellow-400"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-1">Günlük Yedekleme</h4>
+                                    <p class="text-gray-400 text-sm">Verileriniz otomatik olarak yedeklenir</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-900/50 rounded-xl p-6 text-center">
+                            <div class="text-3xl font-bold text-primary-400">10K+</div>
+                            <div class="text-gray-400 text-sm">Aktif Kullanıcı</div>
+                        </div>
+                        <div class="bg-gray-900/50 rounded-xl p-6 text-center">
+                            <div class="text-3xl font-bold text-green-400">99.9%</div>
+                            <div class="text-gray-400 text-sm">Uptime</div>
+                        </div>
+                        <div class="bg-gray-900/50 rounded-xl p-6 text-center">
+                            <div class="text-3xl font-bold text-purple-400">50K+</div>
+                            <div class="text-gray-400 text-sm">Web Sitesi</div>
+                        </div>
+                        <div class="bg-gray-900/50 rounded-xl p-6 text-center">
+                            <div class="text-3xl font-bold text-yellow-400">7/24</div>
+                            <div class="text-gray-400 text-sm">Destek</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div class="mt-16 text-center text-gray-500">
+                <p class="mb-4">
+                    <i class="fas fa-copyright mr-1"></i> 2024 FreeHost Pro. Tüm hakları saklıdır.
+                </p>
+                <div class="flex justify-center space-x-6 text-sm">
+                    <a href="#" class="hover:text-white transition">Gizlilik Politikası</a>
+                    <a href="#" class="hover:text-white transition">Kullanım Şartları</a>
+                    <a href="#" class="hover:text-white transition">SSS</a>
+                    <a href="#" class="hover:text-white transition">İletişim</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
