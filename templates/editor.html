@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editör - {{ site_name }} | FreeHost Pro</title>
+    
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': {
+                            '50': '#eff6ff',
+                            '100': '#dbeafe',
+                            '200': '#bfdbfe',
+                            '300': '#93c5fd',
+                            '400': '#60a5fa',
+                            '500': '#3b82f6',
+                            '600': '#2563eb',
+                            '700': '#1d4ed8',
+                            '800': '#1e40af',
+                            '900': '#1e3a8a',
+                            '950': '#172554',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+        
+        .sidebar-bg {
+            background: linear-gradient(195deg, #0f172a 0%, #1e293b 100%);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .editor-area {
+            background: #0f172a;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        }
+        
+        .file-item {
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .file-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-left-color: #3b82f6;
+        }
+        
+        .file-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            border-left-color: #3b82f6;
+        }
+        
+        .scrollbar-thin {
+            scrollbar-width: thin;
+            scrollbar-color: #3b82f6 transparent;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: #3b82f6;
+            border-radius: 20px;
+        }
+    </style>
+    
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</head>
+<body class="text-gray-100">
+    <div class="flex flex-col h-screen overflow-hidden">
+        <nav class="glass-card py-3 px-6 flex justify-between items-center border-b border-gray-800">
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
+                        <i class="fas fa-code text-sm"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold">FreeHost Pro</h1>
+                        <p class="text-xs text-gray-400">Premium Web Editör</p>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-2 ml-8 px-4 py-2 bg-gray-900 rounded-lg">
+                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    <span class="text-sm font-medium">{{ site_name }}</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <a href="/dashboard" class="flex items-center space-x-2 text-gray-300 hover:text-white transition">
+                    <i class="fas fa-grid text-sm"></i>
+                    <span class="hidden md:inline text-sm">Kontrol Paneli</span>
+                </a>
+                
+                <button onclick="saveFile()" class="btn-primary px-5 py-2.5 rounded-lg font-medium text-sm flex items-center space-x-2">
+                    <i class="fas fa-save"></i>
+                    <span>Kaydet</span>
+                </button>
+                
+                <a href="https://{{ domain }}" target="_blank" class="flex items-center space-x-2 bg-gray-800 hover:bg-gray-700 px-4 py-2.5 rounded-lg transition">
+                    <i class="fas fa-external-link-alt"></i>
+                    <span class="text-sm">Siteyi Görüntüle</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="flex flex-1 overflow-hidden">
+            <div class="sidebar-bg w-72 lg:w-80 flex flex-col border-r border-gray-800">
+                <div class="p-6 border-b border-gray-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold">Dosya Yöneticisi</h2>
+                        <button onclick="newFile()" class="btn-primary p-2 rounded-lg">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="relative">
+                        <input type="text" id="search-files" placeholder="Dosya ara..." 
+                               class="w-full bg-gray-900 border border-gray-700 rounded-lg py-2.5 px-4 pl-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-500"></i>
+                    </div>
+                </div>
+                
+                <div class="flex-1 overflow-y-auto p-4 scrollbar-thin">
+                    <div id="file-list" class="space-y-1">
+                        <div class="text-center py-8">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 mx-auto"></div>
+                            <p class="text-gray-500 text-sm mt-3">Dosyalar yükleniyor...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-4 border-t border-gray-800">
+                    <div class="glass-card rounded-lg p-4">
+                        <div class="flex items-center space-x-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium">Sürüm Kontrol</p>
+                                <p class="text-xs text-gray-400">Otomatik yedekleme aktif</p>
+                            </div>
+                        </div>
+                        <div id="save-status" class="text-xs font-medium"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 flex flex-col overflow-hidden">
+                <div class="glass-card px-6 py-4 border-b border-gray-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <select id="file-select" class="bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                <option value="">Dosya seçin...</option>
+                            </select>
+                            
+                            <button onclick="deleteCurrentFile()" class="p-2.5 bg-red-900/20 hover:bg-red-900/30 text-red-400 rounded-lg transition" title="Dosyayı Sil">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <div class="flex items-center space-x-2 text-sm">
+                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                            <span>Çevrimiçi</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex-1 relative">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary-900/5 to-purple-900/5"></div>
+                    <textarea id="editor" class="editor-area absolute inset-0 w-full h-full p-6 resize-none outline-none text-gray-300" 
+                              spellcheck="false" placeholder="Kodunuzu buraya yazın..."></textarea>
+                </div>
+                
+                <div class="glass-card px-6 py-3 border-t border-gray-800 flex items-center justify-between">
+                    <div class="flex items-center space-x-6 text-sm">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-file-code text-primary-400"></i>
+                            <span id="current-file" class="text-gray-400">Dosya seçilmedi</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-font text-primary-400"></i>
+                            <span id="char-count" class="font-medium">0 karakter</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-clock text-primary-400"></i>
+                            <span id="line-count" class="font-medium">0 satır</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm text-gray-400">
+                            <i class="fas fa-crown text-yellow-500 mr-2"></i>
+                            FreeHost Pro Editör
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script>
+        const siteName = "{{ site_name }}";
+        let currentFile = "";
+
+        // DOSYALARI YÜKLE
+        async function loadFiles() {
+            try {
+                const res = await fetch(`/api/get-files/${siteName}`);
+                if (!res.ok) throw new Error('API hatası');
+                
+                const data = await res.json();
+                
+                const fileList = document.getElementById('file-list');
+                const fileSelect = document.getElementById('file-select');
+                
+                fileList.innerHTML = "";
+                fileSelect.innerHTML = '<option value="">Dosya seçin...</option>';
+                
+                if (!data.files || data.files.length === 0) {
+                    fileList.innerHTML = `
+                        <div class="text-center py-8">
+                            <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-folder-open text-gray-600 text-xl"></i>
+                            </div>
+                            <p class="text-gray-500 mb-4">Henüz dosya yok</p>
+                            <button onclick="newFile()" class="btn-primary px-4 py-2 rounded-lg text-sm">
+                                İlk Dosyayı Oluştur
+                            </button>
+                        </div>`;
+                    return;
+                }
+                
+                data.files.forEach(file => {
+                    // Dosya listesi
+                    const fileItem = document.createElement('div');
+                    fileItem.className = "file-item p-3 rounded-lg cursor-pointer";
+                    fileItem.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-file-code text-primary-400"></i>
+                                <div>
+                                    <div class="font-medium text-sm">${file.name}</div>
+                                    <div class="text-xs text-gray-500">${formatFileSize(file.size || 0)}</div>
+                                </div>
+                            </div>
+                            <button onclick="deleteFile('${file.name}', event)" class="text-gray-500 hover:text-red-400 p-1">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>`;
+                    
+                    fileItem.onclick = () => loadFileContent(file.name);
+                    fileList.appendChild(fileItem);
+                    
+                    // Select dropdown
+                    const option = document.createElement('option');
+                    option.value = file.name;
+                    option.textContent = file.name;
+                    fileSelect.appendChild(option);
+                });
+                
+                if (data.files.length > 0) {
+                    await loadFileContent(data.files[0].name);
+                }
+            } catch (error) {
+                console.error('Dosyalar yüklenirken hata:', error);
+                showNotification('Dosyalar yüklenemedi', 'error');
+            }
+        }
+        
+        // DOSYA İÇERİĞİ YÜKLE
+        async function loadFileContent(filename) {
+            try {
+                currentFile = filename;
+                
+                // Aktif dosyayı işaretle
+                document.querySelectorAll('.file-item').forEach(item => item.classList.remove('active'));
+                document.querySelectorAll('.file-item').forEach(item => {
+                    if (item.textContent.includes(filename)) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                document.getElementById('file-select').value = filename;
+                document.getElementById('current-file').textContent = filename;
+                
+                const res = await fetch(`/api/get-file/${siteName}/${filename}`);
+                if (!res.ok) throw new Error('Dosya yüklenemedi');
+                
+                const data = await res.json();
+                
+                if (data.content) {
+                    document.getElementById('editor').value = data.content;
+                    updateStats();
+                }
+            } catch (error) {
+                console.error('Dosya yüklenirken hata:', error);
+                showNotification('Dosya yüklenemedi', 'error');
+            }
+        }
+        
+        // DOSYA KAYDET
+        async function saveFile() {
+            if (!currentFile) {
+                showNotification('Önce bir dosya seçin', 'warning');
+                return;
+            }
+            
+            const content = document.getElementById('editor').value;
+            
+            try {
+                const res = await fetch(`/api/save-file/${siteName}/${currentFile}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({content: content})
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    showNotification(data.message || 'Dosya kaydedildi!', 'success');
+                } else {
+                    showNotification(data.error || 'Kaydetme hatası', 'error');
+                }
+            } catch (error) {
+                console.error('Kaydetme hatası:', error);
+                showNotification('Kaydetme başarısız', 'error');
+            }
+        }
+        
+        // YENİ DOSYA OLUŞTUR
+        function newFile() {
+            Swal.fire({
+                title: 'Yeni Dosya Oluştur',
+                html: `
+                    <input type="text" id="filename" class="swal2-input" placeholder="index.html" autofocus>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Oluştur',
+                cancelButtonText: 'İptal',
+                preConfirm: () => {
+                    const filename = document.getElementById('filename').value;
+                    
+                    if (!filename) {
+                        Swal.showValidationMessage('Dosya adı gerekli');
+                        return false;
+                    }
+                    
+                    return filename;
+                }
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    currentFile = result.value;
+                    document.getElementById('editor').value = getDefaultTemplate(result.value);
+                    
+                    // Hemen kaydet
+                    setTimeout(() => {
+                        saveFile();
+                        setTimeout(() => {
+                            loadFiles();
+                        }, 500);
+                    }, 100);
+                    
+                    showNotification('Dosya oluşturuldu!', 'success');
+                }
+            });
+        }
+        
+        // MEVCUT DOSYAYI SİL
+        async function deleteCurrentFile() {
+            if (!currentFile) {
+                showNotification('Silinecek dosya seçin', 'warning');
+                return;
+            }
+            
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: `${currentFile} dosyasını silmek istiyor musunuz?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Evet, sil',
+                cancelButtonText: 'İptal',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const res = await fetch(`/api/delete-file/${siteName}/${currentFile}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        const data = await res.json();
+                        
+                        if (data.success) {
+                            showNotification(data.message || 'Dosya silindi!', 'success');
+                            document.getElementById('editor').value = '';
+                            currentFile = '';
+                            loadFiles();
+                        } else {
+                            showNotification(data.error || 'Silme hatası', 'error');
+                        }
+                    } catch (error) {
+                        console.error('Silme hatası:', error);
+                        showNotification('Silme başarısız', 'error');
+                    }
+                }
+            });
+        }
+        
+        // DOSYA SİL (listedeki butondan)
+        async function deleteFile(filename, event) {
+            event.stopPropagation();
+            
+            Swal.fire({
+                title: 'Dosyayı Sil',
+                text: `${filename} dosyasını silmek istiyor musunuz?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sil',
+                cancelButtonText: 'İptal',
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        const res = await fetch(`/api/delete-file/${siteName}/${filename}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        const data = await res.json();
+                        
+                        if (data.success) {
+                            showNotification(data.message || 'Dosya silindi!', 'success');
+                            
+                            // Eğer silinen dosya mevcut dosya ise, editörü temizle
+                            if (currentFile === filename) {
+                                document.getElementById('editor').value = '';
+                                currentFile = '';
+                            }
+                            
+                            // Dosya listesini yenile
+                            loadFiles();
+                        } else {
+                            showNotification(data.error || 'Silme hatası', 'error');
+                        }
+                    } catch (error) {
+                        console.error('Silme hatası:', error);
+                        showNotification('Silme başarısız', 'error');
+                    }
+                }
+            });
+        }
+        
+        // STATS GÜNCELLE
+        function updateStats() {
+            const text = document.getElementById('editor').value;
+            const charCount = text.length;
+            const lineCount = text.split('\n').length;
+            
+            document.getElementById('char-count').textContent = `${charCount} karakter`;
+            document.getElementById('line-count').textContent = `${lineCount} satır`;
+        }
+        
+        // YARDIMCI FONKSİYONLAR
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function getDefaultTemplate(filename) {
+            if (filename.endsWith('.html')) {
+                return `<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Sayfa</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Merhaba Dünya!</h1>
+    <p>FreeHost ile oluşturuldu.</p>
+</body>
+</html>`;
+            } else if (filename.endsWith('.css')) {
+                return `/* ${filename} - FreeHost Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}`;
+            } else if (filename.endsWith('.js')) {
+                return `// ${filename} - FreeHost JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('FreeHost - JavaScript dosyası yüklendi!');
+    
+    // Kodunuzu buraya yazın
+});`;
+            }
+            return '';
+        }
+        
+        function showNotification(message, type = 'info') {
+            const statusEl = document.getElementById('save-status');
+            statusEl.textContent = message;
+            
+            switch(type) {
+                case 'success':
+                    statusEl.className = 'text-xs font-medium text-green-400';
+                    break;
+                case 'warning':
+                    statusEl.className = 'text-xs font-medium text-yellow-400';
+                    break;
+                case 'error':
+                    statusEl.className = 'text-xs font-medium text-red-400';
+                    break;
+                default:
+                    statusEl.className = 'text-xs font-medium text-blue-400';
+            }
+            
+            setTimeout(() => {
+                statusEl.textContent = '';
+            }, 3000);
+        }
+        
+        // EVENT LISTENERS
+        document.getElementById('file-select').addEventListener('change', function(e) {
+            if (e.target.value) {
+                loadFileContent(e.target.value);
+            }
+        });
+        
+        document.getElementById('editor').addEventListener('input', updateStats);
+        
+        // CTRL+S ile kaydet
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+                saveFile();
+            }
+        });
+        
+        // DOSYA ARAMA
+        document.getElementById('search-files').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const fileItems = document.querySelectorAll('.file-item');
+            
+            fileItems.forEach(item => {
+                const fileName = item.textContent.toLowerCase();
+                if (fileName.includes(searchTerm)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+        
+        // BAŞLANGIÇ
+        window.onload = function() {
+            loadFiles();
+            updateStats();
+            
+            // Editor'e focus ver
+            setTimeout(() => {
+                document.getElementById('editor').focus();
+            }, 500);
+        };
+    </script>
+</body>
+</html>
