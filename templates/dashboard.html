@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontrol Paneli - FreeHost Pro</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': {
+                            '50': '#eff6ff',
+                            '100': '#dbeafe',
+                            '200': '#bfdbfe',
+                            '300': '#93c5fd',
+                            '400': '#60a5fa',
+                            '500': '#3b82f6',
+                            '600': '#2563eb',
+                            '700': '#1d4ed8',
+                            '800': '#1e40af',
+                            '900': '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'gradient': 'gradient 8s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .sidebar-bg {
+            background: linear-gradient(195deg, #0f172a 0%, #1e293b 100%);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.7) 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+            transform: translateY(-5px);
+        }
+        
+        .site-card {
+            background: rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+        
+        .site-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            transform: translateX(5px);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-white">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar-bg w-64 lg:w-72 flex flex-col border-r border-gray-800">
+            <!-- Logo -->
+            <div class="p-6 border-b border-gray-800">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">FreeHost Pro</h1>
+                        <p class="text-xs text-gray-400">Premium Hosting</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- User Info -->
+            <div class="p-6 border-b border-gray-800">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-cyan-500 flex items-center justify-center">
+                        <span class="font-bold">{{ username[0]|upper }}</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold">{{ username }}</h3>
+                        <p class="text-xs text-gray-400">Premium Üye</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-400">Disk Kullanımı</span>
+                        <span class="font-medium">1.2 GB / 10 GB</span>
+                    </div>
+                    <div class="w-full bg-gray-800 rounded-full h-2">
+                        <div class="bg-gradient-to-r from-primary-500 to-cyan-500 h-2 rounded-full" style="width: 12%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="flex-1 p-4">
+                <nav class="space-y-2">
+                    <a href="/dashboard" class="flex items-center space-x-3 p-3 rounded-xl bg-primary-500/10 border border-primary-500/30">
+                        <i class="fas fa-grid text-primary-400"></i>
+                        <span class="font-medium">Kontrol Paneli</span>
+                    </a>
+                    <a href="/create-site" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800/50 transition">
+                        <i class="fas fa-plus-circle text-green-400"></i>
+                        <span>Site Oluştur</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800/50 transition">
+                        <i class="fas fa-cog text-yellow-400"></i>
+                        <span>Ayarlar</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800/50 transition">
+                        <i class="fas fa-chart-bar text-purple-400"></i>
+                        <span>Analizler</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-800/50 transition">
+                        <i class="fas fa-question-circle text-blue-400"></i>
+                        <span>Yardım</span>
+                    </a>
+                </nav>
+            </div>
+            
+            <!-- Footer -->
+            <div class="p-4 border-t border-gray-800">
+                <a href="/logout" class="flex items-center justify-center space-x-2 p-3 bg-gray-800/50 hover:bg-gray-800 rounded-xl transition">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Çıkış Yap</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Bar -->
+            <div class="glass-card p-6 border-b border-gray-800 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold">Kontrol Paneli</h2>
+                    <p class="text-gray-400">Sitelerinizi yönetin ve izleyin</p>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button class="flex items-center space-x-2 bg-gray-800 hover:bg-gray-700 px-4 py-2.5 rounded-xl transition">
+                        <i class="fas fa-bell"></i>
+                        <span class="hidden md:inline">Bildirimler</span>
+                    </button>
+                    <a href="/create-site" class="btn-gradient px-6 py-2.5 rounded-xl font-medium flex items-center space-x-2">
+                        <i class="fas fa-plus"></i>
+                        <span>Yeni Site</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Messages -->
+            <div class="p-6">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div class="mb-6 space-y-3">
+                    {% for category, message in messages %}
+                    <div class="glass-card p-4 rounded-xl {% if category == 'success' %}border-green-500/30 bg-green-500/10{% else %}border-red-500/30 bg-red-500/10{% endif %}">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas {% if category == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"></i>
+                                <span>{{ message }}</span>
+                            </div>
+                            <button onclick="this.parentElement.parentElement.remove()" class="text-gray-500 hover:text-white">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+            
+            <!-- Stats -->
+            <div class="px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card rounded-2xl p-6 border border-gray-800">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-xl bg-blue-500/10">
+                                <i class="fas fa-globe text-blue-400 text-xl"></i>
+                            </div>
+                            <div class="text-2xl font-bold">{{ websites|length }}</div>
+                        </div>
+                        <h3 class="font-bold mb-2">Aktif Site</h3>
+                        <p class="text-gray-400 text-sm">Toplam oluşturulan site</p>
+                    </div>
+                    
+                    <div class="stat-card rounded-2xl p-6 border border-gray-800">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-xl bg-green-500/10">
+                                <i class="fas fa-server text-green-400 text-xl"></i>
+                            </div>
+                            <div class="text-2xl font-bold">10 GB</div>
+                        </div>
+                        <h3 class="font-bold mb-2">Disk Alanı</h3>
+                        <p class="text-gray-400 text-sm">Kullanılabilir depolama</p>
+                    </div>
+                    
+                    <div class="stat-card rounded-2xl p-6 border border-gray-800">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-xl bg-purple-500/10">
+                                <i class="fas fa-bolt text-purple-400 text-xl"></i>
+                            </div>
+                            <div class="text-2xl font-bold">%99.9</div>
+                        </div>
+                        <h3 class="font-bold mb-2">Uptime</h3>
+                        <p class="text-gray-400 text-sm">Sistem çalışma oranı</p>
+                    </div>
+                    
+                    <div class="stat-card rounded-2xl p-6 border border-gray-800">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 rounded-xl bg-yellow-500/10">
+                                <i class="fas fa-shield-alt text-yellow-400 text-xl"></i>
+                            </div>
+                            <div class="text-2xl font-bold">SSL</div>
+                        </div>
+                        <h3 class="font-bold mb-2">Güvenlik</h3>
+                        <p class="text-gray-400 text-sm">Aktif koruma</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sites -->
+            <div class="flex-1 overflow-y-auto px-6 pb-6">
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="p-6 border-b border-gray-800 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xl font-bold">Siteleriniz</h3>
+                            <p class="text-gray-400">Oluşturduğunuz tüm web siteleri</p>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <div class="relative">
+                                <input type="text" placeholder="Site ara..." 
+                                       class="bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 pl-10 focus:outline-none focus:ring-2 focus:ring-primary-500">
+                                <i class="fas fa-search absolute left-3 top-3 text-gray-500"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if websites %}
+                    <div class="divide-y divide-gray-800">
+                        {% for site in websites %}
+                        <div class="site-card p-6 flex justify-between items-center">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500/20 to-purple-500/20 flex items-center justify-center">
+                                    <i class="fas fa-code text-primary-400"></i>
+                                </div>
+                                
+                                <div>
+                                    <div class="font-bold text-lg">{{ site['full_path'] }}</div>
+                                    <div class="flex items-center space-x-4 text-sm text-gray-400 mt-1">
+                                        <span><i class="fas fa-calendar mr-1"></i>{{ site['created_at'] }}</span>
+                                        <span><i class="fas fa-folder mr-1"></i>{{ site['file_count'] or 0 }} dosya</span>
+                                        <span><i class="fas fa-database mr-1"></i>{{ site['size'] or '0' }} KB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center space-x-3">
+                                <a href="/editor/{{ site['full_path'] }}" 
+                                   class="px-4 py-2.5 bg-primary-500/10 hover:bg-primary-500/20 text-primary-400 rounded-xl font-medium transition">
+                                    <i class="fas fa-edit mr-2"></i>Düzenle
+                                </a>
+                                
+                                <a href="https://{{ base_domain }}/{{ site['full_path'] }}" target="_blank"
+                                   class="px-4 py-2.5 bg-gray-800 hover:bg-gray-700 rounded-xl font-medium transition">
+                                    <i class="fas fa-external-link-alt mr-2"></i>Git
+                                </a>
+                                
+                                <button onclick="deleteSite('{{ site['full_path'] }}')"
+                                        class="px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl font-medium transition">
+                                    <i class="fas fa-trash mr-2"></i>Sil
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-16">
+                        <div class="w-24 h-24 rounded-full bg-gray-800/50 flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-cloud text-4xl text-gray-600"></i>
+                        </div>
+                        <h4 class="text-2xl font-bold mb-4">Henüz site oluşturmadınız</h4>
+                        <p class="text-gray-400 mb-8 max-w-md mx-auto">İlk web sitenizi oluşturarak başlayın. Sadece birkaç dakika sürer!</p>
+                        <a href="/create-site" class="btn-gradient px-8 py-3 rounded-xl font-bold text-lg inline-flex items-center space-x-2">
+                            <i class="fas fa-plus"></i>
+                            <span>İlk Siteyi Oluştur</span>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Site Silme Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50 hidden">
+        <div class="glass-card rounded-2xl p-8 max-w-md w-full">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-400 text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">Siteyi Sil</h3>
+                <p class="text-gray-400">Bu işlem geri alınamaz. Site ve tüm dosyaları kalıcı olarak silinecektir.</p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-900/50 rounded-xl p-4 text-center">
+                    <p class="font-medium" id="siteToDelete"></p>
+                    <p class="text-sm text-gray-400 mt-1">Bu siteyi silmek istediğinize emin misiniz?</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button onclick="hideDeleteModal()" 
+                            class="flex-1 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl font-medium transition">
+                        İptal
+                    </button>
+                    <button onclick="confirmDelete()" 
+                            class="flex-1 py-3 bg-red-500 hover:bg-red-600 rounded-xl font-medium transition">
+                        Evet, Sil
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let siteToDelete = '';
+        
+        function deleteSite(siteName) {
+            siteToDelete = siteName;
+            document.getElementById('siteToDelete').textContent = siteName;
+            document.getElementById('deleteModal').classList.remove('hidden');
+        }
+        
+        function hideDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            siteToDelete = '';
+        }
+        
+        async function confirmDelete() {
+            try {
+                const res = await fetch(`/api/delete-site/${siteToDelete}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Silme işlemi başarısız: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Silme hatası:', error);
+                alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+            }
+            
+            hideDeleteModal();
+        }
+        
+        // Close modal on outside click
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideDeleteModal();
+            }
+        });
+    </script>
+</body>
+</html>
