@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreeHost Pro - Premium TLD Hosting</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': {
+                            '50': '#eff6ff',
+                            '100': '#dbeafe',
+                            '200': '#bfdbfe',
+                            '300': '#93c5fd',
+                            '400': '#60a5fa',
+                            '500': '#3b82f6',
+                            '600': '#2563eb',
+                            '700': '#1d4ed8',
+                            '800': '#1e40af',
+                            '900': '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'gradient': 'gradient 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        gradient: {
+                            '0%, 100%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+        
+        .hero-gradient {
+            background: var(--gradient-primary);
+            background-size: 200% 200%;
+            animation: gradient 8s ease infinite;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-10px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+        
+        .domain-example {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tld-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            margin: 0 0.25rem;
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.1);
+            animation: float 15s infinite linear;
+        }
+    </style>
+</head>
+<body class="text-white overflow-x-hidden">
+  
+    <div class="particles" id="particles"></div>
+    
+    
+    <nav class="relative z-10 py-6 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center">
+                
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
+                        <i class="fas fa-cloud text-lg"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold">FreeHost</span>
+                        <span class="text-xs text-primary-400 font-medium ml-2 bg-primary-900/30 px-2 py-0.5 rounded">PRO</span>
+                    </div>
+                </div>
+                
+            
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-300 hover:text-white transition">Özellikler</a>
+                    <a href="#pricing" class="text-gray-300 hover:text-white transition">Fiyatlar</a>
+                    <a href="#faq" class="text-gray-300 hover:text-white transition">SSS</a>
+                    <a href="#about" class="text-gray-300 hover:text-white transition">Hakkımızda</a>
+                </div>
+                
+                
+                <div class="flex items-center space-x-4">
+                    <a href="/login" class="btn-secondary px-6 py-2.5 rounded-xl font-medium">
+                        Giriş Yap
+                    </a>
+                    <a href="/register" class="btn-primary px-6 py-2.5 rounded-xl font-medium">
+                        Ücretsiz Başla
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+  
+    <section class="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-2 bg-gray-900/50 px-4 py-2 rounded-full mb-8">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    <span class="text-sm text-green-400 font-medium">Beta - Sınırlı Süreli Ücretsiz</span>
+                </div>
+                
+                <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-purple-400">
+                        Premium Hosting
+                    </span>
+                    <br>
+                    <span class="text-gray-100">Gerçek TLD'ler ile</span>
+                </h1>
+                
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-10">
+                    .com, .net, .org gibi gerçek domain uzantılarını ücretsiz kullanın. 
+                    Hiçbir gizli maliyet yok, reklam yok, limit yok.
+                </p>
+                
+                
+                <div class="domain-example inline-block mb-12 floating">
+                    <span class="text-gray-400">https://</span>
+                    <span class="text-primary-400 font-bold">siteniz</span>
+                    <span class="text-white">.com</span>
+                </div>
+                
+              
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-20">
+                    <a href="/register" class="btn-primary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center space-x-3">
+                        <i class="fas fa-rocket"></i>
+                        <span>Hemen Başla - Ücretsiz</span>
+                    </a>
+                    <a href="#features" class="btn-secondary px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center space-x-3">
+                        <i class="fas fa-play-circle"></i>
+                        <span>Demo İzle</span>
+                    </a>
+                </div>
+                
+              
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                    <div class="text-center">
+                        <div class="stat-number">10K+</div>
+                        <p class="text-gray-400 text-sm mt-2">Aktif Site</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-number">%99.9</div>
+                        <p class="text-gray-400 text-sm mt-2">Uptime</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-number">24/7</div>
+                        <p class="text-gray-400 text-sm mt-2">Destek</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="stat-number">0₺</div>
+                        <p class="text-gray-400 text-sm mt-2">Başlangıç Ücreti</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section id="features" class="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-gray-900/30">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Neden FreeHost Pro?</h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                    Gerçek TLD hosting'in gücünü ücretsiz deneyimleyin
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-6">
+                        <i class="fas fa-globe text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Gerçek TLD'ler</h3>
+                    <p class="text-gray-400 mb-6">
+                        .com, .net, .org gibi gerçek domain uzantılarını ücretsiz kullanın. Subdomain değil, gerçek TLD.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tld-badge">.com</span>
+                        <span class="tld-badge">.net</span>
+                        <span class="tld-badge">.org</span>
+                        <span class="tld-badge">.io</span>
+                    </div>
+                </div>
+               
+              
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Premium Güvenlik</h3>
+                    <p class="text-gray-400 mb-6">
+                        Otomatik SSL, DDoS koruması, günlük yedekleme ve gelişmiş güvenlik duvarı ile siteniz güvende.
+                    </p>
+                    <div class="flex items-center space-x-2 text-sm text-green-400">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Let's Encrypt SSL</span>
+                    </div>
+                </div>
+                
+              
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-6">
+                        <i class="fas fa-bolt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Yüksek Performans</h3>
+                    <p class="text-gray-400 mb-6">
+                        SSD depolama, LiteSpeed sunucular ve CDN entegrasyonu ile süper hızlı yükleme süreleri.
+                    </p>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-green-400">99.9%</div>
+                            <div class="text-xs text-gray-400">Uptime</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-400">0.5s</div>
+                            <div class="text-xs text-gray-400">TTFB</div>
+                        </div>
+                    </div>
+                </div>
+                
+            
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center mb-6">
+                        <i class="fas fa-code text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Gelişmiş Editör</h3>
+                    <p class="text-gray-400 mb-6">
+                        Kod renklendirme, otomatik tamamlama, sürüm kontrolü ve canlı önizleme ile profesyonel geliştirme.
+                    </p>
+                    <div class="flex items-center space-x-2 text-sm text-blue-400">
+                        <i class="fab fa-js"></i>
+                        <i class="fab fa-html5"></i>
+                        <i class="fab fa-css3-alt"></i>
+                        <i class="fab fa-php"></i>
+                    </div>
+                </div>
+                
+                
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-red-500 to-pink-500 flex items-center justify-center mb-6">
+                        <i class="fas fa-infinity text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Sınırsız Kaynak</h3>
+                    <p class="text-gray-400 mb-6">
+                        Bant genişliği, disk alanı, veritabanı - hiçbir sınırlama yok. Gerçekten sınırsız hosting.
+                    </p>
+                    <div class="space-y-2">
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-400">Disk Alanı</span>
+                            <span class="font-medium text-green-400">Sınırsız</span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-400">Bant Genişliği</span>
+                            <span class="font-medium text-green-400">Sınırsız</span>
+                        </div>
+                    </div>
+                </div>
+                
+              
+                <div class="feature-card rounded-2xl p-8">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center mb-6">
+                        <i class="fas fa-headset text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">7/24 Destek</h3>
+                    <p class="text-gray-400 mb-6">
+                        Canlı sohbet, e-posta ve telefon desteği. Ortalama yanıt süresi 5 dakikanın altında.
+                    </p>
+                    <div class="flex items-center space-x-2 text-sm text-purple-400">
+                        <i class="fas fa-comments"></i>
+                        <span>Canlı Destek</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="pricing" class="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Basit ve Şeffaf Fiyatlandırma</h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                    Premium özellikler, sıfır maliyet. Gerçekten ücretsiz.
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-effect rounded-2xl p-8 md:p-12">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <div class="inline-flex items-center space-x-2 bg-primary-500/10 px-4 py-2 rounded-full mb-6">
+                                <i class="fas fa-crown text-yellow-500"></i>
+                                <span class="text-primary-400 font-medium">Önerilen</span>
+                            </div>
+                            <h3 class="text-3xl font-bold mb-4">FreeHost Pro</h3>
+                            <div class="flex items-baseline mb-6">
+                                <span class="text-5xl font-bold">0₺</span>
+                                <span class="text-gray-400 ml-2">/ sonsuza kadar</span>
+                            </div>
+                            <p class="text-gray-400 mb-8">
+                                Tüm premium özellikler, hiçbir kısıtlama olmadan tamamen ücretsiz.
+                                Reklam yok, gizli maliyet yok, sürpriz yok.
+                            </p>
+                            <a href="/register" class="btn-primary w-full py-4 rounded-xl font-bold text-lg">
+                                Hemen Başla
+                            </a>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-check text-green-400 mt-1"></i>
+                                <div>
+                                    <h4 class="font-medium">Gerçek TLD Domain</h4>
+                                    <p class="text-gray-400 text-sm">.com, .net, .org ve daha fazlası</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-check text-green-400 mt-1"></i>
+                                <div>
+                                    <h4 class="font-medium">Sınırsız Hosting</h4>
+                                    <p class="text-gray-400 text-sm">Disk alanı, bant genişliği, veritabanı</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-check text-green-400 mt-1"></i>
+                                <div>
+                                    <h4 class="font-medium">Premium Güvenlik</h4>
+                                    <p class="text-gray-400 text-sm">SSL, DDoS koruma, otomatik yedekleme</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-check text-green-400 mt-1"></i>
+                                <div>
+                                    <h4 class="font-medium">7/24 Destek</h4>
+                                    <p class="text-gray-400 text-sm">Canlı sohbet ve e-posta desteği</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section id="faq" class="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-gray-900/30">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Sıkça Sorulan Sorular</h2>
+                <p class="text-gray-400">Aklınıza takılan soruların cevapları</p>
+            </div>
+            
+            <div class="space-y-6">
+                
+                <div class="glass-effect rounded-2xl p-6">
+                    <h3 class="text-lg font-bold mb-3 flex items-center justify-between cursor-pointer" onclick="toggleFAQ(1)">
+                        <span>Bu gerçekten ücretsiz mi?</span>
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </h3>
+                    <p class="text-gray-400 hidden" id="faq-1">
+                        Evet, tamamen ücretsiz. Reklam göstermiyoruz, veri satmıyoruz, gizli maliyet yok. 
+                        Amacımız premium hosting'i herkes için erişilebilir kılmak.
+                    </p>
+                </div>
+                
+                
+                <div class="glass-effect rounded-2xl p-6">
+                    <h3 class="text-lg font-bold mb-3 flex items-center justify-between cursor-pointer" onclick="toggleFAQ(2)">
+                        <span>Hangi domain uzantılarını destekliyorsunuz?</span>
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </h3>
+                    <p class="text-gray-400 hidden" id="faq-2">
+                        .com, .net, .org, .io, .info ve daha birçok popüler TLD'yi destekliyoruz. 
+                        Yeni uzantılar için öneride bulunabilirsiniz.
+                    </p>
+                </div>
+                
+                
+                <div class="glass-effect rounded-2xl p-6">
+                    <h3 class="text-lg font-bold mb-3 flex items-center justify-between cursor-pointer" onclick="toggleFAQ(3)">
+                        <span>Ne kadar süreyle ücretsiz kalacak?</span>
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </h3>
+                    <p class="text-gray-400 hidden" id="faq-3">
+                        Her zaman ücretsiz olacak. Gelecekte premium paketler ekleyebiliriz, 
+                        ancak mevcut kullanıcılar için ücretsiz plan her zaman devam edecek.
+                    </p>
+                </div>
+                
+                
+                <div class="glass-effect rounded-2xl p-6">
+                    <h3 class="text-lg font-bold mb-3 flex items-center justify-between cursor-pointer" onclick="toggleFAQ(4)">
+                        <span>Veri güvenliği nasıl sağlanıyor?</span>
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </h3>
+                    <p class="text-gray-400 hidden" id="faq-4">
+                        Verileriniz şifrelenmiş SSD'lerde saklanır, günlük yedeklenir ve 
+                        DDoS koruması ile korunur. Ayrıca otomatik SSL sertifikaları sağlıyoruz.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="glass-effect rounded-2xl p-12">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center mx-auto mb-8">
+                    <i class="fas fa-gem text-2xl"></i>
+                </div>
+                <h2 class="text-4xl font-bold mb-6">Hazır mısınız?</h2>
+                <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                    Binlerce kullanıcının tercihi FreeHost Pro ile premium hosting deneyimini ücretsiz yaşayın.
+                </p>
+                <a href="/register" class="btn-primary px-12 py-4 rounded-xl font-bold text-2xl inline-flex items-center space-x-3">
+                    <span>Ücretsiz Hesap Oluştur</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+                <p class="text-gray-500 text-sm mt-6">
+                    60 saniyede hazır. Kredi kartı gerekmez.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    
+    <footer class="relative z-10 py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-purple-600 flex items-center justify-center">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <div>
+                            <span class="text-xl font-bold">FreeHost</span>
+                            <span class="text-xs text-primary-400">PRO</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        Premium hosting'i herkes için ücretsiz hale getiriyoruz.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Ürün</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition text-sm">Özellikler</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-white transition text-sm">Fiyatlandırma</a></li>
+                        <li><a href="#faq" class="text-gray-400 hover:text-white transition text-sm">SSS</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition text-sm">API</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Şirket</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition text-sm">Hakkımızda</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition text-sm">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition text-sm">Kariyer</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition text-sm">İletişim</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold mb-4">Yasal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition text-sm">Gizlilik Politikası</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition text-sm">Kullanım Şartları</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition text-sm">Çerez Politikası</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition text-sm">DMCA</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                    © 2024 FreeHost Pro. Tüm hakları saklıdır.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+  
+    <script>
+        
+        function toggleFAQ(id) {
+            const faqContent = document.getElementById(`faq-${id}`);
+            const icon = faqContent.previousElementSibling.querySelector('i');
+            
+            if (faqContent.classList.contains('hidden')) {
+                faqContent.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                faqContent.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+        
+        
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+          
+                const size = Math.random() * 100 + 50;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.opacity = Math.random() * 0.1 + 0.05;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
+        
+      
+        window.onload = function() {
+            createParticles();
+        };
+    </script>
+</body>
+</html>
