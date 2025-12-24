@@ -309,7 +309,7 @@ def host_dispatcher():
     # Panel yollarını kontrol et
     panel_paths = ['/login', '/logout', '/register', '/dashboard',
                    '/websites', '/create-site', '/editor', '/api',
-                   '/static', '/admin', '/favicon.ico', '/']
+                   '/static', '/admin', '/favicon.ico']
     
     for panel_path in panel_paths:
         if path.startswith(panel_path):
